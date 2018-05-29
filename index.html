@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>boilerPlate</title>
+</head>
+
+<body>
+    <script>
+        
+        (function () {
+            function Question(question, answerArr) {
+                this.question = question;
+                this.answer = answerArr;
+                this.correctAns = answerArr[0].toUpperCase();
+            }
+            Question.prototype.displayQuestion = function () {
+                var a = 1;
+                console.log(this.question);
+                this.shuffleArray(this.answer);
+                for (var i = 0; i < this.answer.length; i++) {
+                    console.log(i + a + ". " + this.answer[i]);
+                }
+            }
+            Question.prototype.shuffleArray = function (array) {
+                for (var i = array.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+                return array;
+            }
+            Question.prototype.checkAnswer = function (ans, callback) {
+                var sc;
+                if (ans.toUpperCase() === this.correctAns) {
+                    console.log("Correct answer!");
+                    sc = callback(true);
+                    this.displayScore(sc);
+                } else {
+                    console.log("Wrong answer.Try again!");
+                    sc = callback(false);
+                    this.displayScore(sc);
+                }
+            }
+            Question.prototype.checkAnswerNumber = function (ans, callback) {
+                var sc;
+                var a = 1;
+                var number = this.answer[ans - 1].toUpperCase();
+                if (number === this.correctAns) {
+                    console.log("Correct answer!");
+                    sc = callback(true);
+                    this.displayScore(sc);
+                } else {
+                    console.log("Wrong answer.Try again!");
+                    sc = callback(false);
+                    this.displayScore(sc);
+                }
+            }
+            Question.prototype.displayScore = function (score) {
+                if (score === 3) {
+                    is = false;
+                    console.log("You won the game & your final score is " + score + ".");
+                    console.log(" ----------------- ");
+                } else {
+                    console.log("your current score is " + score + ".");
+                    console.log(" ----------------- ");
+                }
+            }
+            var qOne = new Question("Is JavaScript the coolest programming language in the world?", ["yes", "No", "none"]);
+            var qTwo = new Question("What is the name of this courses's teacher?", ["Jonas", "Michael", "John"]);
+            var qThree = new Question("What does best describe coding?", ["Fun", "Hard", "Tedious", "Boring"]);
+            var qFour = new Question("jibone ki ami effecient hobona?", ["hobo", "hobona", "aage thekei", "baler Question"]);
+
+            var is = true;
+            var questions = [qOne, qTwo, qThree, qFour];
+            var scoreUpdate = score();
+            newQuestion();
+
+            function newQuestion() {
+                if (is) {
+                    var n = Math.floor(Math.random() * questions.length);
+                    questions[n].displayQuestion();
+                    var answer = prompt("Please select the correct answer.");
+
+                    if (answer === "" || answer === null) {
+                        console.log("You Quite the game!");
+                    } else if (answer.toUpperCase() === "exit".toUpperCase() || answer.toUpperCase() === "quite".toUpperCase()) {
+                        console.log("You Quite the game!");
+                    } else {
+                        if (!isNaN(answer)) {
+                            questions[n].checkAnswerNumber(answer, scoreUpdate);
+                            newQuestion();
+                        } else {
+                            questions[n].checkAnswer(answer, scoreUpdate);
+                            newQuestion();
+                        }
+                    }
+                }
+            }
+            function score() {
+                var sc = 0;
+                return function (correct) {
+                    if (correct) {
+                        sc++;
+                    }
+                    return sc;
+                }
+            }
+        })();
+
+    </script>
+</body>
+
+</html>
